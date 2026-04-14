@@ -87,7 +87,8 @@ def get_active_model():
     target = UPDATED_MODEL_PATH if os.path.exists(UPDATED_MODEL_PATH) else MODEL_PATH
     if os.path.exists(target):
         try:
-            raw_model = tf.keras.models.load_model(target)
+            # Setting compile=False bypasses the KerasSaveable bug for metrics like 'mse' on reload
+            raw_model = tf.keras.models.load_model(target, compile=False)
             # Reconstruct architecture for 5 weeks if necessary
             adapted_model = adapt_model_shape_for_5_weeks(raw_model)
             # Dummy predict to initialize graph correctly
