@@ -44,6 +44,18 @@ def update_history_csv():
 # ==============================================================================
 # MODEL MANAGEMENT (Loading & Architecture Transfer)
 # ==============================================================================
+# Keras 3 / TF >= 2.16 Hotfix: Legacy .h5 files saved with TensorFlow 2.x inject 
+# 'batch_shape' and 'optional' into InputLayers, which crash Keras 3 deserialization.
+# This runtime monkeypatch cleanly intercepts and strips those archaic kwargs globally.
+original_input_init = tf.keras.layers.InputLayer.__init__
+
+def patched_input_init(self, **kwargs):
+    kwargs.pop('batch_shape', None)
+    kwargs.pop('optional', None)
+    original_input_init(self, **kwargs)
+
+tf.keras.layers.InputLayer.__init__ = patched_input_init
+
 @st.cache_resource
 def adapt_model_shape_for_5_weeks(original_model):
     """
