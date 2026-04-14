@@ -16,7 +16,7 @@ st.set_page_config(
 
 # Persistent Data Storage Setup (Session State + CSV Optionally)
 DATA_PATH = "data/historical_data.csv"
-MODEL_PATH = "models/lstm_model.h5"
+MODEL_PATH = "models/lstm_model.keras"
 UPDATED_MODEL_PATH = "models/lstm_model_updated.keras"
 
 feature_columns = [
